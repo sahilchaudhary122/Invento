@@ -1,11 +1,16 @@
-import type { InventoryAdjustment, InventoryAdjustmentCreate, PaginatedResponse } from '../types/operations'
+import type {
+  InventoryAdjustment,
+  InventoryAdjustmentCreate,
+  AdjustmentResponse,
+  PaginatedResponse,
+} from '../types/operations'
 import { api } from './client'
 
 export interface AdjustmentListParams {
   page?: number
   size?: number
   status?: string
-  warehouse_id?: number
+  warehouse_id?: string | number
 }
 
 /**
@@ -22,16 +27,14 @@ export const adjustmentsApi = {
     return api.get<PaginatedResponse<InventoryAdjustment>>(`/adjustments${qs ? `?${qs}` : ''}`)
   },
 
-  get: (id: number): Promise<InventoryAdjustment> =>
-    api.get<InventoryAdjustment>(`/adjustments/${id}`),
+  create: (data: InventoryAdjustmentCreate): Promise<AdjustmentResponse> =>
+    api.post<AdjustmentResponse>('/adjustments', data),
 
-  create: (data: InventoryAdjustmentCreate): Promise<InventoryAdjustment> =>
-    api.post<InventoryAdjustment>('/adjustments', data),
+  /** Validate the adjustment — sets stock to physical count and logs delta to StockLedger */
+  validate: (id: string): Promise<AdjustmentResponse> =>
+    api.post<AdjustmentResponse>(`/adjustments/${id}/validate`, {}),
 
-  /** Validate the adjustment — applies stock deltas */
-  validate: (id: number): Promise<InventoryAdjustment> =>
-    api.post<InventoryAdjustment>(`/adjustments/${id}/validate`, {}),
-
-  cancel: (id: number): Promise<InventoryAdjustment> =>
-    api.post<InventoryAdjustment>(`/adjustments/${id}/cancel`, {}),
+  cancel: (id: string): Promise<AdjustmentResponse> =>
+    api.post<AdjustmentResponse>(`/adjustments/${id}/cancel`, {}),
 }
+

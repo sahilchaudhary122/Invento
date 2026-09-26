@@ -168,37 +168,46 @@ export interface InternalTransfer extends TransferResponse {
 
 // ─── Inventory Adjustments ────────────────────────────────────────────────────
 
-export type AdjustmentStatus = 'draft' | 'validated' | 'cancelled';
+export type AdjustmentStatus = 'DRAFT' | 'VALIDATED' | 'CANCELED';
 
-export interface AdjustmentLine {
-  id: number;
-  adjustment_id: number;
-  product_id: number;
+export interface AdjustmentItem {
+  id?: string;
+  adjustment_id?: string;
+  product_id: string;
   product_name?: string;
-  location_id: number;
-  location_name?: string;
-  theoretical_qty: number;
-  real_qty: number;
-  difference: number;
+  system_quantity?: number;
+  physical_quantity: number;
+  difference?: number;
 }
 
-export interface InventoryAdjustment {
-  id: number;
-  reference: string;
-  warehouse_id: number;
-  warehouse_name?: string;
-  status: AdjustmentStatus;
-  reason?: string;
-  created_at: string;
-  lines?: AdjustmentLine[];
+export type AdjustmentLine = AdjustmentItem;
+
+export interface AdjustmentItemCreate {
+  product_id: string;
+  physical_quantity: number;
 }
 
 export interface InventoryAdjustmentCreate {
-  warehouse_id: number;
-  reason?: string;
-  lines?: Array<{
-    product_id: number;
-    location_id: number;
-    real_qty: number;
-  }>;
+  reference: string;
+  location_id: string;
+  reason: string;
+  items: AdjustmentItemCreate[];
 }
+
+export interface AdjustmentResponse {
+  id: string;
+  reference: string;
+  location_id: string;
+  status: AdjustmentStatus;
+  reason: string;
+}
+
+export interface InventoryAdjustment extends AdjustmentResponse {
+  location_name?: string;
+  warehouse_id?: string | number;
+  warehouse_name?: string;
+  created_at?: string;
+  items?: AdjustmentItem[];
+  lines?: AdjustmentItem[];
+}
+
