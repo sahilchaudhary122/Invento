@@ -4,7 +4,7 @@ import type {
   TransferResponse,
   PaginatedResponse,
 } from '../types/operations'
-import { api } from './client'
+import { api, ApiNotAvailableError } from './client'
 
 export interface TransferListParams {
   page?: number
@@ -16,13 +16,20 @@ export interface TransferListParams {
  * Internal Transfers API — maps to /api/v1/transfers
  */
 export const transfersApi = {
-  list: (params?: TransferListParams): Promise<PaginatedResponse<InternalTransfer>> => {
+  list: async (params?: TransferListParams): Promise<PaginatedResponse<InternalTransfer>> => {
     const q = new URLSearchParams()
     if (params?.page   != null) q.set('page',   String(params.page))
     if (params?.size   != null) q.set('size',   String(params.size))
     if (params?.status        ) q.set('status', params.status)
     const qs = q.toString()
-    return api.get<PaginatedResponse<InternalTransfer>>(`/transfers${qs ? `?${qs}` : ''}`)
+    try {
+      return await api.get<PaginatedResponse<InternalTransfer>>(`/transfers${qs ? `?${qs}` : ''}`)
+    } catch (err) {
+      if (err instanceof ApiNotAvailableError) {
+        throw err
+      }
+      return { items: [], total: 0, page: params?.page ?? 1, size: params?.size ?? 50 }
+    }
   },
 
   create: (data: InternalTransferCreate): Promise<TransferResponse> =>
