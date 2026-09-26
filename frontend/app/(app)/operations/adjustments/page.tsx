@@ -104,7 +104,7 @@ export default function AdjustmentsPage() {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
-      await adjustmentsApi.create({
+      const newAdj = await adjustmentsApi.create({
         reference: formRef.trim(),
         location_id: formLocationId.trim(),
         reason: formReason.trim(),
@@ -117,7 +117,7 @@ export default function AdjustmentsPage() {
       });
       setIsModalOpen(false);
       setFormRef(`ADJ-${Math.floor(100 + Math.random() * 900)}`);
-      await loadData();
+      setAdjustments((prev) => [newAdj, ...prev]);
     } catch (err: unknown) {
       if (err instanceof ApiResponseError) {
         setSubmitError(err.detail);
@@ -129,10 +129,12 @@ export default function AdjustmentsPage() {
     }
   };
 
-  const handleValidate = async (id: number) => {
+  const handleValidate = async (id: number | string) => {
     try {
-      await adjustmentsApi.validate(id);
-      await loadData();
+      const updated = await adjustmentsApi.validate(Number(id));
+      setAdjustments((prev) =>
+        prev.map((a) => (String(a.id) === String(id) ? updated : a))
+      );
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to validate adjustment";
       alert(msg);
