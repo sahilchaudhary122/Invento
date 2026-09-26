@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -34,7 +33,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white">
+    <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-background text-text">
       {/* LEFT: Brand Panel */}
       <div className="hidden md:flex flex-col justify-between p-12 bg-primary text-white relative overflow-hidden">
         <div className="relative z-10">
@@ -59,17 +58,16 @@ export default function LoginPage() {
           Odoo Hackathon 2026
         </div>
 
-        {/* Decorative elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-primary via-primary/90 to-purple-800 opacity-50" />
       </div>
 
       {/* RIGHT: Login Form */}
-      <div className="flex items-center justify-center p-8 bg-slate-50/50">
+      <div className="flex items-center justify-center p-8 bg-background text-text">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center md:text-left">
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome back</h2>
+            <h2 className="text-3xl font-bold text-text tracking-tight">Welcome back</h2>
             <p className="text-muted mt-2 font-medium">Sign in to your dashboard</p>
           </div>
 
@@ -82,7 +80,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Email Address</label>
+              <label className="block text-sm font-semibold text-text mb-1.5 ml-1">Email Address</label>
               <div className="relative group">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted group-focus-within:text-primary transition-colors" />
                 <input
@@ -98,7 +96,7 @@ export default function LoginPage() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5 ml-1">
-                <label className="block text-sm font-semibold text-gray-700">Password</label>
+                <label className="block text-sm font-semibold text-text">Password</label>
                 <button
                   type="button"
                   className="text-xs font-bold text-primary hover:text-primary-hover transition-colors"
@@ -146,7 +144,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-10 pt-8 border-t border-slate-200 text-center text-sm">
+          <div className="mt-10 pt-8 border-t border-border text-center text-sm">
             <span className="text-muted font-medium">New to Invento?</span>{" "}
             <button className="text-primary font-bold hover:underline ml-1">
               Contact Admin

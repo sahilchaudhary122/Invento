@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -7,7 +6,7 @@ import { useState } from "react";
 import {
   LayoutDashboard, Package, ClipboardList, Truck, ArrowLeftRight,
   SlidersHorizontal, History, Settings, User, LogOut, ChevronDown,
-  Warehouse as WarehouseIcon, Building2, type LucideIcon,
+  Warehouse as WarehouseIcon, Building2, X, type LucideIcon,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -18,27 +17,44 @@ export default function Sidebar() {
 
   const isActive = (path: string) => pathname === path;
 
+  const closeMobile = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      window.dispatchEvent(new CustomEvent("close-mobile-sidebar"));
+    }
+  };
+
   return (
-    <aside className="w-64 min-h-screen bg-white border-r border-border flex flex-col">
+    <aside
+      id="sidebar"
+      className="w-64 min-h-screen bg-surface border-r border-border flex flex-col transition-colors
+                 fixed lg:sticky top-0 left-0 z-50
+                 -translate-x-full lg:translate-x-0
+                 transition-transform duration-300 ease-in-out"
+    >
       {/* Logo */}
-      <div className="p-5 border-b border-border">
+      <div className="p-5 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
             <Package className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-base leading-tight">Invento</h1>
+            <h1 className="font-bold text-base leading-tight text-text">Invento</h1>
             <p className="text-xs text-muted">Inventory MS</p>
           </div>
         </div>
+        <button
+          onClick={closeMobile}
+          className="lg:hidden p-1.5 rounded-lg hover:bg-background"
+        >
+          <X className="w-5 h-5 text-muted" />
+        </button>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 p-3 overflow-y-auto">
-        <NavItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" active={isActive("/dashboard")} />
-        <NavItem href="/products" icon={Package} label="Products" active={isActive("/products")} />
+        <NavItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" active={isActive("/dashboard")} onClick={closeMobile} />
+        <NavItem href="/products" icon={Package} label="Products" active={isActive("/products")} onClick={closeMobile} />
 
-        {/* Operations Group */}
         <button
           onClick={() => setOpsOpen(!opsOpen)}
           className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-muted hover:bg-background transition mt-1"
@@ -52,16 +68,15 @@ export default function Sidebar() {
 
         {opsOpen && (
           <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-border pl-3">
-            <NavItem href="/operations/receipts" icon={Truck} label="Receipts" active={isActive("/operations/receipts")} small />
-            <NavItem href="/operations/deliveries" icon={Truck} label="Deliveries" active={isActive("/operations/deliveries")} small />
-            <NavItem href="/operations/transfers" icon={ArrowLeftRight} label="Transfers" active={isActive("/operations/transfers")} small />
-            <NavItem href="/operations/adjustments" icon={SlidersHorizontal} label="Adjustments" active={isActive("/operations/adjustments")} small />
+            <NavItem href="/operations/receipts" icon={Truck} label="Receipts" active={isActive("/operations/receipts")} small onClick={closeMobile} />
+            <NavItem href="/operations/deliveries" icon={Truck} label="Deliveries" active={isActive("/operations/deliveries")} small onClick={closeMobile} />
+            <NavItem href="/operations/transfers" icon={ArrowLeftRight} label="Transfers" active={isActive("/operations/transfers")} small onClick={closeMobile} />
+            <NavItem href="/operations/adjustments" icon={SlidersHorizontal} label="Adjustments" active={isActive("/operations/adjustments")} small onClick={closeMobile} />
           </div>
         )}
 
-        <NavItem href="/history" icon={History} label="Move History" active={isActive("/history")} />
+        <NavItem href="/history" icon={History} label="Move History" active={isActive("/history")} onClick={closeMobile} />
 
-        {/* Settings Group */}
         <button
           onClick={() => setSettingsOpen(!settingsOpen)}
           className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-muted hover:bg-background transition mt-1"
@@ -75,13 +90,13 @@ export default function Sidebar() {
 
         {settingsOpen && (
           <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-border pl-3">
-            <NavItem href="/settings/warehouses" icon={WarehouseIcon} label="Warehouses" active={isActive("/settings/warehouses")} small />
-            <NavItem href="/settings/locations" icon={Building2} label="Locations" active={isActive("/settings/locations")} small />
+            <NavItem href="/settings/warehouses" icon={WarehouseIcon} label="Warehouses" active={isActive("/settings/warehouses")} small onClick={closeMobile} />
+            <NavItem href="/settings/locations" icon={Building2} label="Locations" active={isActive("/settings/locations")} small onClick={closeMobile} />
           </div>
         )}
 
         <div className="mt-3 pt-3 border-t border-border">
-          <NavItem href="/profile" icon={User} label="My Profile" active={isActive("/profile")} />
+          <NavItem href="/profile" icon={User} label="My Profile" active={isActive("/profile")} onClick={closeMobile} />
           <button
             onClick={() => { localStorage.clear(); router.push("/login"); }}
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-danger hover:bg-red-50 transition mt-1"
@@ -100,13 +115,14 @@ export default function Sidebar() {
 }
 
 function NavItem({
-  href, icon: Icon, label, active, small,
+  href, icon: Icon, label, active, small, onClick,
 }: {
-  href: string; icon: LucideIcon; label: string; active: boolean; small?: boolean;
+  href: string; icon: LucideIcon; label: string; active: boolean; small?: boolean; onClick?: () => void;
 }) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition mt-0.5 ${
         active
           ? "bg-primary text-white"
