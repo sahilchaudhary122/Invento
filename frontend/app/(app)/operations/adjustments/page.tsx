@@ -161,9 +161,9 @@ export default function AdjustmentsPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
       {/* PAGE HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 border border-purple-500/20">
@@ -172,7 +172,7 @@ export default function AdjustmentsPage() {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Inventory Adjustments</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Inventory Adjustments</h1>
             <span className="px-3 py-0.5 rounded-full text-sm font-medium bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300">
               {totalAdjustments} adjustments
             </span>
@@ -184,7 +184,7 @@ export default function AdjustmentsPage() {
 
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 transition-all transform active:scale-95"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 transition-all transform active:scale-95 w-full sm:w-auto"
         >
           <Plus className="w-5 h-5" />
           New Adjustment
@@ -192,12 +192,12 @@ export default function AdjustmentsPage() {
       </div>
 
       {/* STATS ROW */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Total Adjustments */}
         <div className="p-5 rounded-2xl bg-card border border-border/60 shadow-sm flex items-center justify-between relative overflow-hidden group hover:border-purple-500/30 transition-all">
           <div className="space-y-1 z-10">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Adjustments</p>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{totalAdjustments}</h3>
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">{totalAdjustments}</h3>
           </div>
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-purple-500/20 z-10">
             <FileText className="w-6 h-6" />
@@ -209,7 +209,7 @@ export default function AdjustmentsPage() {
         <div className="p-5 rounded-2xl bg-card border border-border/60 shadow-sm flex items-center justify-between relative overflow-hidden group hover:border-amber-500/30 transition-all">
           <div className="space-y-1 z-10">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Pending</p>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{pendingCount}</h3>
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">{pendingCount}</h3>
           </div>
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md shadow-amber-500/20 z-10">
             <Clock className="w-6 h-6" />
@@ -221,7 +221,7 @@ export default function AdjustmentsPage() {
         <div className="p-5 rounded-2xl bg-card border border-border/60 shadow-sm flex items-center justify-between relative overflow-hidden group hover:border-emerald-500/30 transition-all">
           <div className="space-y-1 z-10">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Completed</p>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{doneCount}</h3>
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">{doneCount}</h3>
           </div>
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 z-10">
             <CheckCircle2 className="w-6 h-6" />
@@ -233,7 +233,7 @@ export default function AdjustmentsPage() {
         <div className="p-5 rounded-2xl bg-card border border-border/60 shadow-sm flex items-center justify-between relative overflow-hidden group hover:border-blue-500/30 transition-all">
           <div className="space-y-1 z-10">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Corrected</p>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">{totalCorrectedAbsolute} <span className="text-xs font-normal text-muted-foreground">units</span></h3>
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">{totalCorrectedAbsolute} <span className="text-xs font-normal text-muted-foreground">units</span></h3>
           </div>
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 z-10">
             <Calculator className="w-6 h-6" />
@@ -243,8 +243,8 @@ export default function AdjustmentsPage() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-card p-4 rounded-2xl border border-border/60 shadow-sm">
-        <div className="relative w-full md:w-80">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-4 rounded-2xl border border-border/60 shadow-sm">
+        <div className="relative w-full sm:w-80">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
@@ -278,19 +278,19 @@ export default function AdjustmentsPage() {
 
       {/* TABLE */}
       <div className="bg-card rounded-2xl border border-border/60 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-border/60 bg-muted/30 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                <th className="py-4 px-6">Adjustment #</th>
-                <th className="py-4 px-6">Product</th>
-                <th className="py-4 px-6">Location</th>
-                <th className="py-4 px-6">Date</th>
-                <th className="py-4 px-6 text-right">System</th>
-                <th className="py-4 px-6 text-right">Counted</th>
-                <th className="py-4 px-6 text-right">Diff</th>
-                <th className="py-4 px-6">Status</th>
-                <th className="py-4 px-6 text-right">Actions</th>
+                <th className="py-4 px-4 md:px-6 whitespace-nowrap">Adjustment #</th>
+                <th className="py-4 px-4 md:px-6 whitespace-nowrap">Product</th>
+                <th className="py-4 px-4 md:px-6 whitespace-nowrap">Location</th>
+                <th className="py-4 px-4 md:px-6 whitespace-nowrap">Date</th>
+                <th className="py-4 px-4 md:px-6 text-right whitespace-nowrap">System</th>
+                <th className="py-4 px-4 md:px-6 text-right whitespace-nowrap">Counted</th>
+                <th className="py-4 px-4 md:px-6 text-right whitespace-nowrap">Diff</th>
+                <th className="py-4 px-4 md:px-6 whitespace-nowrap">Status</th>
+                <th className="py-4 px-4 md:px-6 text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/40 text-sm">
@@ -303,20 +303,20 @@ export default function AdjustmentsPage() {
               ) : (
                 filteredAdjustments.map((adj) => (
                   <tr key={adj.id} className="hover:bg-muted/20 transition-colors group">
-                    <td className="py-4 px-6 font-mono text-purple-600 dark:text-purple-400 font-semibold">
+                    <td className="py-4 px-4 md:px-6 font-mono text-purple-600 dark:text-purple-400 font-semibold whitespace-nowrap">
                       {adj.ref}
                     </td>
-                    <td className="py-4 px-6 font-medium text-foreground">
+                    <td className="py-4 px-4 md:px-6 font-medium text-foreground whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         <Package className="w-4 h-4 text-muted-foreground" />
                         {adj.product}
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-muted-foreground">{adj.location}</td>
-                    <td className="py-4 px-6 text-muted-foreground">{adj.date}</td>
-                    <td className="py-4 px-6 text-right font-mono text-muted-foreground">{adj.system_qty}</td>
-                    <td className="py-4 px-6 text-right font-mono font-medium text-foreground">{adj.counted_qty}</td>
-                    <td className="py-4 px-6 text-right font-mono">
+                    <td className="py-4 px-4 md:px-6 text-muted-foreground whitespace-nowrap">{adj.location}</td>
+                    <td className="py-4 px-4 md:px-6 text-muted-foreground whitespace-nowrap">{adj.date}</td>
+                    <td className="py-4 px-4 md:px-6 text-right font-mono text-muted-foreground whitespace-nowrap">{adj.system_qty}</td>
+                    <td className="py-4 px-4 md:px-6 text-right font-mono font-medium text-foreground whitespace-nowrap">{adj.counted_qty}</td>
+                    <td className="py-4 px-4 md:px-6 text-right font-mono whitespace-nowrap">
                       {adj.diff > 0 ? (
                         <span className="inline-flex items-center justify-end gap-1 text-emerald-600 font-bold">
                           <TrendingUp className="w-3.5 h-3.5" />
@@ -331,8 +331,8 @@ export default function AdjustmentsPage() {
                         <span className="text-muted-foreground">0</span>
                       )}
                     </td>
-                    <td className="py-4 px-6">{getStatusBadge(adj.status)}</td>
-                    <td className="py-4 px-6 text-right">
+                    <td className="py-4 px-4 md:px-6 whitespace-nowrap">{getStatusBadge(adj.status)}</td>
+                    <td className="py-4 px-4 md:px-6 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => handleDeleteAdjustment(adj.id)}
@@ -358,7 +358,7 @@ export default function AdjustmentsPage() {
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-md bg-card border-l border-border shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+            <div className="w-full sm:max-w-md bg-card border-l border-border shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
               
               {/* Drawer Header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
@@ -518,24 +518,24 @@ export default function AdjustmentsPage() {
               </div>
 
               {/* Drawer Footer */}
-              <div className="p-6 border-t border-border/60 bg-muted/20 flex items-center justify-end gap-3">
+              <div className="p-6 border-t border-border/60 bg-muted/20 flex flex-col sm:flex-row items-center justify-end gap-3">
                 <button
                   onClick={() => setIsDrawerOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-border hover:bg-muted text-foreground transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-border hover:bg-muted text-foreground transition-colors w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleCreateAdjustment("draft")}
                   disabled={!hasCounted}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-border hover:bg-muted text-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-border hover:bg-muted text-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors w-full sm:w-auto"
                 >
                   Save Draft
                 </button>
                 <button
                   onClick={() => handleCreateAdjustment("done")}
                   disabled={!hasCounted}
-                  className="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all w-full sm:w-auto"
                 >
                   Validate Adjustment
                 </button>

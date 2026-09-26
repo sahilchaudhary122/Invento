@@ -129,14 +129,14 @@ export default function DeliveriesPage() {
   return (
     <div className="space-y-6">
       {/* PAGE HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="bg-primary/10 text-primary px-3 py-1 rounded-full inline-flex items-center gap-1.5 mb-3 text-xs uppercase tracking-wider font-semibold">
             <Truck className="w-3.5 h-3.5" />
             OPERATIONS
           </div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Delivery Orders</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Delivery Orders</h1>
             <span className="bg-purple-100 text-purple-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">
               {deliveries.length} deliveries
             </span>
@@ -146,7 +146,7 @@ export default function DeliveriesPage() {
 
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-lg shadow-primary/30 hover:scale-105 transition-all duration-200"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-lg shadow-primary/30 hover:scale-105 transition-all duration-200 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           New Delivery
@@ -154,54 +154,54 @@ export default function DeliveriesPage() {
       </div>
 
       {/* STATS ROW (4 cards) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Total Deliveries */}
-        <div className="rounded-2xl border border-border p-5 bg-white hover:-translate-y-1 transition-all duration-200 shadow-sm">
+        <div className="rounded-2xl border border-border p-5 bg-surface hover:-translate-y-1 transition-all duration-200 shadow-sm">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
             <FileText className="w-5 h-5" />
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-bold text-foreground">{totalDeliveriesCount}</div>
+            <div className="text-xl md:text-2xl font-bold text-text">{totalDeliveriesCount}</div>
             <div className="text-xs text-muted uppercase font-semibold mt-0.5 tracking-wider">Total Deliveries</div>
           </div>
         </div>
 
         {/* Pending */}
-        <div className="rounded-2xl border border-border p-5 bg-white hover:-translate-y-1 transition-all duration-200 shadow-sm">
+        <div className="rounded-2xl border border-border p-5 bg-surface hover:-translate-y-1 transition-all duration-200 shadow-sm">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md shadow-amber-500/20">
             <Clock className="w-5 h-5" />
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-bold text-foreground">{pendingCount}</div>
+            <div className="text-xl md:text-2xl font-bold text-text">{pendingCount}</div>
             <div className="text-xs text-muted uppercase font-semibold mt-0.5 tracking-wider">Pending</div>
           </div>
         </div>
 
         {/* Completed */}
-        <div className="rounded-2xl border border-border p-5 bg-white hover:-translate-y-1 transition-all duration-200 shadow-sm">
+        <div className="rounded-2xl border border-border p-5 bg-surface hover:-translate-y-1 transition-all duration-200 shadow-sm">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-bold text-foreground">{completedCount}</div>
+            <div className="text-xl md:text-2xl font-bold text-text">{completedCount}</div>
             <div className="text-xs text-muted uppercase font-semibold mt-0.5 tracking-wider">Completed</div>
           </div>
         </div>
 
         {/* Total Items */}
-        <div className="rounded-2xl border border-border p-5 bg-white hover:-translate-y-1 transition-all duration-200 shadow-sm">
+        <div className="rounded-2xl border border-border p-5 bg-surface hover:-translate-y-1 transition-all duration-200 shadow-sm">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
             <Package className="w-5 h-5" />
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-bold text-foreground">{totalItemsCount}</div>
+            <div className="text-xl md:text-2xl font-bold text-text">{totalItemsCount}</div>
             <div className="text-xs text-muted uppercase font-semibold mt-0.5 tracking-wider">Total Items</div>
           </div>
         </div>
       </div>
 
       {/* FILTER BAR */}
-      <div className="rounded-2xl border border-border p-4 bg-white flex flex-col md:flex-row items-center gap-3 shadow-sm">
+      <div className="rounded-2xl border border-border p-4 bg-surface flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shadow-sm">
         <div className="relative flex-1 w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <input
@@ -223,7 +223,7 @@ export default function DeliveriesPage() {
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                   isActive
                     ? "bg-primary text-white shadow-sm"
-                    : "bg-background text-muted hover:bg-slate-100 hover:text-foreground"
+                    : "bg-background text-muted hover:bg-background hover:text-text"
                 }`}
               >
                 {status}
@@ -232,25 +232,25 @@ export default function DeliveriesPage() {
           })}
         </div>
 
-        <button className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-xs font-semibold text-foreground hover:bg-background transition">
+        <button className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border text-xs font-semibold text-text hover:bg-background transition w-full sm:w-auto">
           <SlidersHorizontal className="w-3.5 h-3.5" />
           Filters
         </button>
       </div>
 
       {/* TABLE */}
-      <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+      <div className="rounded-2xl border border-border bg-surface overflow-hidden shadow-sm">
+        <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background border-b border-border text-muted text-xs uppercase tracking-wide">
-                <th className="py-3.5 px-6 font-semibold">Delivery #</th>
-                <th className="py-3.5 px-6 font-semibold">Customer</th>
-                <th className="py-3.5 px-6 font-semibold">Date</th>
-                <th className="py-3.5 px-6 font-semibold">Source</th>
-                <th className="py-3.5 px-6 font-semibold">Items</th>
-                <th className="py-3.5 px-6 font-semibold">Status</th>
-                <th className="py-3.5 px-6 font-semibold text-right">Actions</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Delivery #</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Customer</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Date</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Source</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Items</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold whitespace-nowrap">Status</th>
+                <th className="py-3.5 px-4 md:px-6 font-semibold text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border text-sm">
@@ -272,31 +272,31 @@ export default function DeliveriesPage() {
 
                   return (
                     <tr key={delivery.id} className="hover:bg-background/60 transition-colors">
-                      <td className="py-4 px-6 font-mono text-sm text-primary font-semibold">
+                      <td className="py-4 px-4 md:px-6 font-mono text-sm text-primary font-semibold whitespace-nowrap">
                         {delivery.ref}
                       </td>
-                      <td className="py-4 px-6 font-medium text-foreground">
+                      <td className="py-4 px-4 md:px-6 font-medium text-text whitespace-nowrap">
                         {delivery.customer}
                       </td>
-                      <td className="py-4 px-6 text-muted">
+                      <td className="py-4 px-4 md:px-6 text-muted whitespace-nowrap">
                         {delivery.date}
                       </td>
-                      <td className="py-4 px-6 text-muted">
+                      <td className="py-4 px-4 md:px-6 text-muted whitespace-nowrap">
                         {delivery.source}
                       </td>
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-4 md:px-6 whitespace-nowrap">
                         <div className="inline-flex items-center gap-1.5 text-muted">
                           <Package className="w-3.5 h-3.5 text-primary" />
                           <span>{delivery.items} items ({delivery.qty} qty)</span>
                         </div>
                       </td>
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-4 md:px-6 whitespace-nowrap">
                         <span className={`rounded-full px-3 py-1 text-xs font-semibold inline-flex items-center gap-1.5 capitalize ${statusStyles[delivery.status] || "bg-gray-100 text-gray-700"}`}>
                           <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
                           {delivery.status}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-right">
+                      <td className="py-4 px-4 md:px-6 text-right whitespace-nowrap">
                         <div className="inline-flex items-center gap-2">
                           <button
                             onClick={() => handleDeleteDelivery(delivery.id)}
@@ -305,7 +305,7 @@ export default function DeliveriesPage() {
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
-                          <button className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-slate-100 transition">
+                          <button className="p-1.5 rounded-lg text-muted hover:text-text hover:bg-background transition">
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         </div>
@@ -321,15 +321,15 @@ export default function DeliveriesPage() {
 
       {/* DRAWER */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm flex justify-end">
           {/* Backdrop */}
           <div
-            className="flex-1 bg-black/40 backdrop-blur-sm transition-opacity"
+            className="flex-1"
             onClick={() => setIsDrawerOpen(false)}
           />
 
           {/* Panel */}
-          <div className="w-full max-w-lg bg-white shadow-2xl flex flex-col h-full transform transition-transform duration-300">
+          <div className="w-full sm:max-w-lg bg-surface shadow-2xl flex flex-col h-full transform transition-transform duration-300 border-l border-border z-10">
             {/* Header */}
             <div className="p-6 border-b border-border flex justify-between items-center">
               <div>
@@ -421,7 +421,7 @@ export default function DeliveriesPage() {
                                 newLines[index].product = e.target.value;
                                 setFormLines(newLines);
                               }}
-                              className="w-full py-2 px-3 rounded-lg border border-border bg-white text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                              className="w-full py-2 px-3 rounded-lg border border-border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                             >
                               {MOCK_PRODUCTS.map((prod) => (
                                 <option key={prod.name} value={prod.name}>{prod.name}</option>
@@ -439,7 +439,7 @@ export default function DeliveriesPage() {
                                 newLines[index].qty = e.target.value;
                                 setFormLines(newLines);
                               }}
-                              className="w-full py-2 px-3 rounded-lg border border-border bg-white text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                              className="w-full py-2 px-3 rounded-lg border border-border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                             />
                           </div>
                           <div className="col-span-2 flex justify-center">
@@ -474,18 +474,18 @@ export default function DeliveriesPage() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-border flex gap-3 bg-white">
+            <div className="p-4 border-t border-border flex flex-col sm:flex-row gap-3 bg-surface">
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="flex-1 py-3 px-4 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-background transition text-center"
+                className="flex-1 py-3 px-4 rounded-xl border border-border text-sm font-medium text-foreground hover:bg-background transition text-center w-full sm:w-auto"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => handleCreateDelivery("draft")}
-                className="flex-1 py-3 px-4 rounded-xl border border-purple-300 text-sm font-medium text-primary hover:bg-purple-50 transition text-center"
+                className="flex-1 py-3 px-4 rounded-xl border border-purple-300 text-sm font-medium text-primary hover:bg-purple-50 transition text-center w-full sm:w-auto"
               >
                 Save Draft
               </button>
@@ -493,7 +493,7 @@ export default function DeliveriesPage() {
                 type="button"
                 disabled={hasExceededStock}
                 onClick={() => handleCreateDelivery("done")}
-                className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium shadow-lg shadow-primary/30 hover:opacity-95 transition text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium shadow-lg shadow-primary/30 hover:opacity-95 transition text-center disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
               >
                 Validate Delivery
               </button>
