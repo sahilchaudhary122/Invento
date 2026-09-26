@@ -2,16 +2,21 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   LayoutDashboard, Package, ClipboardList, Truck, ArrowLeftRight,
   SlidersHorizontal, History, Settings, User, LogOut, ChevronDown,
+<<<<<<< HEAD
   Warehouse as WarehouseIcon, Building2, X,
+=======
+  Warehouse as WarehouseIcon, Building2, type LucideIcon,
+>>>>>>> origin/feature/backend-core
 } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [opsOpen, setOpsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -99,7 +104,7 @@ export default function Sidebar() {
         <div className="mt-3 pt-3 border-t border-border">
           <NavItem href="/profile" icon={User} label="My Profile" active={isActive("/profile")} onClick={closeMobile} />
           <button
-            onClick={() => { localStorage.clear(); window.location.href = "/login"; }}
+            onClick={() => { localStorage.clear(); router.push("/login"); }}
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-danger hover:bg-red-50 transition mt-1"
           >
             <LogOut className="w-4 h-4" />
@@ -118,7 +123,11 @@ export default function Sidebar() {
 function NavItem({
   href, icon: Icon, label, active, small, onClick,
 }: {
+<<<<<<< HEAD
   href: string; icon: any; label: string; active: boolean; small?: boolean; onClick?: () => void;
+=======
+  href: string; icon: LucideIcon; label: string; active: boolean; small?: boolean;
+>>>>>>> origin/feature/backend-core
 }) {
   return (
     <Link
