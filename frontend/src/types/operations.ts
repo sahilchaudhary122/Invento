@@ -76,39 +76,47 @@ export interface Receipt extends ReceiptResponse {
 
 // ─── Delivery Orders ──────────────────────────────────────────────────────────
 
-export type DeliveryStatus = 'draft' | 'ready' | 'done' | 'cancelled';
+export type DeliveryStatus = 'DRAFT' | 'VALIDATED' | 'CANCELED';
 
-export interface DeliveryOrderLine {
-  id: number;
-  delivery_order_id: number;
-  product_id: number;
+export interface DeliveryItem {
+  id?: string;
+  delivery_id?: string;
+  product_id: string;
   product_name?: string;
-  qty: number;
-  uom?: string;
+  quantity: number;
 }
 
-export interface DeliveryOrder {
-  id: number;
-  reference: string;
-  customer?: string;
-  warehouse_id: number;
-  warehouse_name?: string;
-  status: DeliveryStatus;
-  scheduled_date?: string;
-  created_at: string;
-  lines?: DeliveryOrderLine[];
+export type DeliveryOrderLine = DeliveryItem;
+
+export interface DeliveryItemCreate {
+  product_id: string;
+  quantity: number;
 }
 
 export interface DeliveryOrderCreate {
-  customer?: string;
-  warehouse_id: number;
-  scheduled_date?: string;
-  lines?: Array<{
-    product_id: number;
-    qty: number;
-    uom?: string;
-  }>;
+  reference: string;
+  source_location_id: string;
+  items: DeliveryItemCreate[];
 }
+
+export interface DeliveryResponse {
+  id: string;
+  reference: string;
+  source_location_id: string;
+  status: DeliveryStatus;
+}
+
+export interface DeliveryOrder extends DeliveryResponse {
+  customer?: string;
+  source_location_name?: string;
+  warehouse_id?: string | number;
+  warehouse_name?: string;
+  scheduled_date?: string;
+  created_at?: string;
+  items?: DeliveryItem[];
+  lines?: DeliveryItem[];
+}
+
 
 // ─── Internal Transfers ───────────────────────────────────────────────────────
 
