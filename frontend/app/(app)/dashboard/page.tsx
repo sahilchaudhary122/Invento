@@ -95,7 +95,7 @@ interface KPICardProps {
 
 function KPICard({ icon, label, value, gradient, trend, trendUp }: KPICardProps) {
   return (
-    <div className="bg-white rounded-2xl border border-border p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
+    <div className="bg-surface rounded-2xl border border-border p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
       <div className="flex items-start justify-between">
         <div
           className={`w-11 h-11 rounded-xl flex items-center justify-center text-white bg-gradient-to-br ${gradient} hover:scale-[1.02] transition-transform shadow-md`}
@@ -114,7 +114,7 @@ function KPICard({ icon, label, value, gradient, trend, trendUp }: KPICardProps)
         </span>
       </div>
       <div className="mt-4">
-        <p className="text-3xl font-bold text-gray-900 tracking-tight">{value}</p>
+        <p className="text-2xl md:text-3xl font-bold text-text tracking-tight">{value}</p>
         <p className="text-xs text-muted uppercase tracking-wider mt-1 font-medium">{label}</p>
       </div>
     </div>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
       case "adjustment":
         return "bg-amber-50 text-amber-700 border-amber-200";
       default:
-        return "bg-gray-50 text-gray-700 border-gray-200";
+        return "bg-background text-text border-border";
     }
   };
 
@@ -208,7 +208,7 @@ export default function DashboardPage() {
             <Sparkles className="w-3.5 h-3.5" />
             Dashboard
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-extrabold tracking-tight text-text">
             Welcome back,{" "}
             <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Inventory Manager
@@ -230,15 +230,15 @@ export default function DashboardPage() {
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-border p-5 h-36 animate-pulse flex flex-col justify-between"
+              className="bg-surface rounded-2xl border border-border p-5 h-36 animate-pulse flex flex-col justify-between"
             >
               <div className="flex justify-between items-center">
-                <div className="w-11 h-11 bg-gray-200 rounded-xl" />
-                <div className="w-12 h-5 bg-gray-200 rounded-full" />
+                <div className="w-11 h-11 bg-border rounded-xl" />
+                <div className="w-12 h-5 bg-border rounded-full" />
               </div>
               <div>
-                <div className="w-16 h-8 bg-gray-200 rounded mb-2" />
-                <div className="w-24 h-3 bg-gray-200 rounded" />
+                <div className="w-16 h-8 bg-border rounded mb-2" />
+                <div className="w-24 h-3 bg-border rounded" />
               </div>
             </div>
           ))}
@@ -260,9 +260,9 @@ export default function DashboardPage() {
       )}
 
       {/* Chart Card */}
-      <div className="bg-white rounded-2xl border border-border p-6 shadow-sm">
+      <div className="bg-surface rounded-2xl border border-border p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Stock Activity</h2>
+          <h2 className="text-lg font-bold text-text">Stock Activity</h2>
           <span className="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200/60">
             Last 7 days
           </span>
@@ -303,9 +303,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Activity Table Card */}
-      <div className="bg-white rounded-2xl border border-border p-6 shadow-sm">
+      <div className="bg-surface rounded-2xl border border-border p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Recent Activity</h2>
+          <h2 className="text-lg font-bold text-text">Recent Activity</h2>
           <a
             href="#view-all"
             className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1 transition-colors"
@@ -329,7 +329,7 @@ export default function DashboardPage() {
               {MOCK_ACTIVITY.map((item, index) => (
                 <tr key={index} className="hover:bg-background transition-colors">
                   <td className="py-3.5 px-4 text-muted text-sm">{item.date}</td>
-                  <td className="py-3.5 px-4 font-semibold text-gray-900">{item.product}</td>
+                  <td className="py-3.5 px-4 font-semibold text-text">{item.product}</td>
                   <td className="py-3.5 px-4">
                     <span
                       className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${getOpPillStyle(
