@@ -51,7 +51,7 @@ export default function LoginPage() {
       </div>
 
       {/* RIGHT: Login Form */}
-      <div className="flex items-center justify-center p-8">
+      <div className="flex items-center justify-center p-8 bg-background text-text">
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold mb-2">Welcome back</h2>
           <p className="text-muted mb-8">Sign in to manage your inventory</p>

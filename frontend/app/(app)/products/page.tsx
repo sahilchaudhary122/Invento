@@ -150,13 +150,13 @@ export default function ProductsPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="uppercase tracking-wider text-xs font-semibold bg-primary/10 text-primary px-3 py-1 rounded-full inline-block mb-3">
             Catalog
           </span>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-text">
               Products
             </h1>
             <span className="bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-1 rounded-full">
@@ -169,7 +169,7 @@ export default function ProductsPage() {
         </div>
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium px-5 py-2.5 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-2 self-start sm:self-auto cursor-pointer"
+          className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium px-5 py-2.5 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -177,40 +177,40 @@ export default function ProductsPage() {
       </div>
 
       {/* Stats Row (3 mini cards) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-surface rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shrink-0">
             <Package className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-900 tracking-tight">{totalProducts}</p>
+            <p className="text-xl md:text-2xl font-bold text-text tracking-tight">{totalProducts}</p>
             <p className="text-xs text-muted uppercase tracking-wider font-semibold mt-0.5">Total Products</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-amber-500 to-orange-600 shadow-md">
+        <div className="bg-surface rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-amber-500 to-orange-600 shadow-md shrink-0">
             <AlertTriangle className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-900 tracking-tight">{lowStockCount}</p>
+            <p className="text-xl md:text-2xl font-bold text-text tracking-tight">{lowStockCount}</p>
             <p className="text-xs text-muted uppercase tracking-wider font-semibold mt-0.5">Low Stock / Out</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md">
+        <div className="bg-surface rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm col-span-2 md:col-span-1">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shrink-0">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-900 tracking-tight">{healthyCount}</p>
+            <p className="text-xl md:text-2xl font-bold text-text tracking-tight">{healthyCount}</p>
             <p className="text-xs text-muted uppercase tracking-wider font-semibold mt-0.5">Healthy Stock</p>
           </div>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white rounded-2xl border border-border p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-surface rounded-2xl border border-border p-4 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <input
@@ -239,16 +239,16 @@ export default function ProductsPage() {
             ))}
           </div>
 
-          <button className="btn-secondary flex items-center gap-2 py-2 px-3 text-xs">
+          <button className="btn-secondary flex items-center gap-2 py-2 px-3 text-xs w-full sm:w-auto justify-center">
             <SlidersHorizontal className="w-3.5 h-3.5" />
             Filters
           </button>
 
-          <div className="flex items-center bg-background border border-border rounded-xl p-1">
+          <div className="flex items-center bg-background border border-border rounded-xl p-1 shrink-0">
             <button
               onClick={() => setViewMode("table")}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                viewMode === "table" ? "bg-primary text-white shadow-sm" : "text-muted hover:text-gray-900"
+                viewMode === "table" ? "bg-primary text-white shadow-sm" : "text-muted hover:text-text"
               }`}
             >
               <List className="w-4 h-4" />
@@ -256,7 +256,7 @@ export default function ProductsPage() {
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                viewMode === "grid" ? "bg-primary text-white shadow-sm" : "text-muted hover:text-gray-900"
+                viewMode === "grid" ? "bg-primary text-white shadow-sm" : "text-muted hover:text-text"
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -267,35 +267,35 @@ export default function ProductsPage() {
 
       {/* Products Table / Grid Container */}
       {filteredProducts.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-border p-16 text-center shadow-sm">
+        <div className="bg-surface rounded-2xl border border-border p-16 text-center shadow-sm">
           <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
             <Package className="w-10 h-10" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">No products found</h3>
+          <h3 className="text-lg font-bold text-text mb-1">No products found</h3>
           <p className="text-sm text-muted mb-6">
             Try a different search or add a new product
           </p>
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="btn-primary inline-flex items-center gap-2 cursor-pointer"
+            className="btn-primary inline-flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center"
           >
             <Plus className="w-4 h-4" />
             Add Product
           </button>
         </div>
       ) : viewMode === "table" ? (
-        <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
+        <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-sm">
+          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-background border-b border-border text-muted text-xs uppercase tracking-wider font-bold">
-                  <th className="py-3.5 px-6">Product</th>
-                  <th className="py-3.5 px-6">SKU</th>
-                  <th className="py-3.5 px-6">Category</th>
-                  <th className="py-3.5 px-6 text-right">Stock</th>
-                  <th className="py-3.5 px-6 text-right">Reorder</th>
-                  <th className="py-3.5 px-6">Status</th>
-                  <th className="py-3.5 px-6 text-center">Actions</th>
+                  <th className="py-3.5 px-4 md:px-6 whitespace-nowrap">Product</th>
+                  <th className="py-3.5 px-4 md:px-6 whitespace-nowrap">SKU</th>
+                  <th className="py-3.5 px-4 md:px-6 whitespace-nowrap">Category</th>
+                  <th className="py-3.5 px-4 md:px-6 text-right whitespace-nowrap">Stock</th>
+                  <th className="py-3.5 px-4 md:px-6 text-right whitespace-nowrap">Reorder</th>
+                  <th className="py-3.5 px-4 md:px-6 whitespace-nowrap">Status</th>
+                  <th className="py-3.5 px-4 md:px-6 text-center whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border text-sm">
@@ -312,21 +312,21 @@ export default function ProductsPage() {
                       key={product.id}
                       className="hover:bg-background/80 transition-colors group"
                     >
-                      <td className="py-4 px-6">
-                        <div className="font-semibold text-base text-gray-900">
+                      <td className="py-4 px-4 md:px-6">
+                        <div className="font-semibold text-base text-text whitespace-nowrap">
                           {product.name}
                         </div>
                       </td>
-                      <td className="py-4 px-6 font-mono text-xs text-muted">
+                      <td className="py-4 px-4 md:px-6 font-mono text-xs text-muted whitespace-nowrap">
                         {product.sku}
                       </td>
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-4 md:px-6 whitespace-nowrap">
                         <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/5 text-primary border border-primary/20">
                           {product.category}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-right">
-                        <div className="text-lg font-bold text-gray-900">
+                      <td className="py-4 px-4 md:px-6 text-right whitespace-nowrap">
+                        <div className="text-lg font-bold text-text">
                           {product.stock}{" "}
                           <span className="text-xs text-muted font-normal">
                             {product.uom}
@@ -345,10 +345,10 @@ export default function ProductsPage() {
                           />
                         </div>
                       </td>
-                      <td className="py-4 px-6 text-right text-muted font-medium">
+                      <td className="py-4 px-4 md:px-6 text-right text-muted font-medium whitespace-nowrap">
                         {product.reorder_point} {product.uom}
                       </td>
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-4 md:px-6 whitespace-nowrap">
                         {isOut ? (
                           <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
@@ -366,8 +366,8 @@ export default function ProductsPage() {
                           </span>
                         )}
                       </td>
-                      <td className="py-4 px-6 text-center">
-                        <button className="p-2 rounded-lg hover:bg-border transition-colors text-muted hover:text-gray-900 cursor-pointer">
+                      <td className="py-4 px-4 md:px-6 text-center whitespace-nowrap">
+                        <button className="p-2 rounded-lg hover:bg-border transition-colors text-muted hover:text-text cursor-pointer">
                           <MoreVertical className="w-4 h-4" />
                         </button>
                       </td>
@@ -391,18 +391,18 @@ export default function ProductsPage() {
             return (
               <div
                 key={product.id}
-                className="bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-surface rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between mb-3">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/5 text-primary border border-primary/20">
                       {product.category}
                     </span>
-                    <button className="p-1.5 rounded-lg hover:bg-border transition-colors text-muted hover:text-gray-900 cursor-pointer">
+                    <button className="p-1.5 rounded-lg hover:bg-border transition-colors text-muted hover:text-text cursor-pointer">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-0.5">
+                  <h3 className="text-lg font-bold text-text mb-0.5">
                     {product.name}
                   </h3>
                   <p className="font-mono text-xs text-muted mb-4">{product.sku}</p>
@@ -412,7 +412,7 @@ export default function ProductsPage() {
                       <span className="text-xs text-muted font-medium uppercase tracking-wider">
                         Current Stock
                       </span>
-                      <span className="text-xl font-extrabold text-gray-900">
+                      <span className="text-xl font-extrabold text-text">
                         {product.stock} <span className="text-xs text-muted font-normal">{product.uom}</span>
                       </span>
                     </div>
@@ -433,7 +433,7 @@ export default function ProductsPage() {
 
                 <div className="flex items-center justify-between pt-3 border-t border-border">
                   <span className="text-xs text-muted">
-                    Reorder at: <strong className="text-gray-800">{product.reorder_point} {product.uom}</strong>
+                    Reorder at: <strong className="text-text">{product.reorder_point} {product.uom}</strong>
                   </span>
                   {isOut ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
@@ -460,26 +460,26 @@ export default function ProductsPage() {
 
       {/* DRAWER */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm flex justify-end">
           {/* Backdrop */}
           <div
-            className="flex-1 bg-black/40 backdrop-blur-sm transition-opacity"
+            className="flex-1"
             onClick={() => setIsDrawerOpen(false)}
           />
 
           {/* Panel */}
-          <div className="w-full max-w-md bg-white shadow-2xl flex flex-col h-full transform transition-transform duration-300 ease-out z-10">
+          <div className="w-full sm:max-w-md bg-surface shadow-2xl flex flex-col h-full transform transition-transform duration-300 ease-out z-10 border-l border-border">
             {/* Header */}
             <div className="p-6 border-b border-border flex justify-between items-center bg-background/50">
               <div>
-                <h2 className="text-lg font-bold text-gray-900">Add Product</h2>
+                <h2 className="text-lg font-bold text-text">Add Product</h2>
                 <p className="text-xs text-muted mt-0.5">
                   Create a new inventory item
                 </p>
               </div>
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="p-2 rounded-lg hover:bg-border text-muted hover:text-gray-900 transition-colors cursor-pointer"
+                className="p-2 rounded-lg hover:bg-border text-muted hover:text-text transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -493,7 +493,7 @@ export default function ProductsPage() {
                 </label>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       Product Name *
                     </label>
                     <input
@@ -507,7 +507,7 @@ export default function ProductsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       SKU Code *
                     </label>
                     <input
@@ -528,7 +528,7 @@ export default function ProductsPage() {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       Category
                     </label>
                     <select
@@ -543,7 +543,7 @@ export default function ProductsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       Unit of Measure
                     </label>
                     <select
@@ -566,7 +566,7 @@ export default function ProductsPage() {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       Initial Stock
                     </label>
                     <input
@@ -579,7 +579,7 @@ export default function ProductsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
+                    <label className="block text-xs text-muted font-medium mb-1">
                       Reorder Level
                     </label>
                     <input
@@ -605,13 +605,13 @@ export default function ProductsPage() {
                 <button
                   type="button"
                   onClick={() => setIsDrawerOpen(false)}
-                  className="btn-secondary flex-1 justify-center py-3 cursor-pointer"
+                  className="btn-secondary flex-1 justify-center py-3 cursor-pointer w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium flex-1 justify-center py-3 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer"
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium flex-1 justify-center py-3 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer w-full sm:w-auto"
                 >
                   Save Product
                 </button>
