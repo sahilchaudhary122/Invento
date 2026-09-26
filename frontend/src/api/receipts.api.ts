@@ -1,11 +1,17 @@
-import type { Receipt, ReceiptCreate, PaginatedResponse } from '../types/operations'
+import type {
+  Receipt,
+  ReceiptCreate,
+  ReceiptValidate,
+  ReceiptResponse,
+  PaginatedResponse,
+} from '../types/operations'
 import { api } from './client'
 
 export interface ReceiptListParams {
   page?: number
   size?: number
   status?: string
-  warehouse_id?: number
+  warehouse_id?: string | number
 }
 
 /**
@@ -24,23 +30,19 @@ export const receiptsApi = {
     return api.get<PaginatedResponse<Receipt>>(`/receipts${qs ? `?${qs}` : ''}`)
   },
 
-  /** Get a single receipt by ID (includes lines) */
-  get: (id: number): Promise<Receipt> =>
+  /** Get a single receipt by ID */
+  get: (id: string): Promise<Receipt> =>
     api.get<Receipt>(`/receipts/${id}`),
 
-  /** Create a new receipt */
-  create: (data: ReceiptCreate): Promise<Receipt> =>
-    api.post<Receipt>('/receipts', data),
+  /** Create a new draft receipt */
+  create: (data: ReceiptCreate): Promise<ReceiptResponse> =>
+    api.post<ReceiptResponse>('/receipts', data),
 
-  /** Confirm a draft receipt */
-  confirm: (id: number): Promise<Receipt> =>
-    api.post<Receipt>(`/receipts/${id}/confirm`, {}),
+  /** Validate a receipt (moves items into stock at location_id and creates ledger entries) */
+  validate: (id: string, data: ReceiptValidate): Promise<ReceiptResponse> =>
+    api.post<ReceiptResponse>(`/receipts/${id}/validate`, data),
 
-  /** Cancel a receipt */
-  cancel: (id: number): Promise<Receipt> =>
-    api.post<Receipt>(`/receipts/${id}/cancel`, {}),
-
-  /** Mark receipt as done (all lines received) */
-  validate: (id: number): Promise<Receipt> =>
-    api.post<Receipt>(`/receipts/${id}/validate`, {}),
+  /** Cancel a draft receipt */
+  cancel: (id: string): Promise<ReceiptResponse> =>
+    api.post<ReceiptResponse>(`/receipts/${id}/cancel`, {}),
 }

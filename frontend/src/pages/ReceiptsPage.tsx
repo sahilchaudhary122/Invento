@@ -38,7 +38,10 @@ const columns: Column<Receipt>[] = [
   {
     key: 'created_at',
     header: 'Created',
-    render: r => new Date(r.created_at).toLocaleDateString(),
+    render: r =>
+      r.created_at
+        ? new Date(r.created_at).toLocaleDateString()
+        : <span className="muted">—</span>,
   },
 ]
 
@@ -69,7 +72,7 @@ export default function ReceiptsPage() {
 
       {/* Stats row */}
       <div className="stats-row">
-        {(['draft', 'confirmed', 'done', 'cancelled'] as const).map(status => (
+        {(['DRAFT', 'VALIDATED', 'CANCELED'] as const).map(status => (
           <div className="stat-card" key={status}>
             <div className="stat-card-label">{status}</div>
             <div className="stat-card-value">

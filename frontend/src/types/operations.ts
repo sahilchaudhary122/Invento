@@ -29,39 +29,49 @@ export interface Location {
 
 // ─── Receipts ─────────────────────────────────────────────────────────────────
 
-export type ReceiptStatus = 'draft' | 'confirmed' | 'done' | 'cancelled';
+export type ReceiptStatus = 'DRAFT' | 'VALIDATED' | 'CANCELED';
 
-export interface ReceiptLine {
-  id: number;
-  receipt_id: number;
-  product_id: number;
+export interface ReceiptItem {
+  id?: string;
+  receipt_id?: string;
+  product_id: string;
   product_name?: string;
-  expected_qty: number;
-  received_qty: number;
-  uom?: string;
+  quantity: number;
+  unit_cost?: number;
 }
 
-export interface Receipt {
-  id: number;
-  reference: string;
-  supplier?: string;
-  warehouse_id: number;
-  warehouse_name?: string;
-  status: ReceiptStatus;
-  scheduled_date?: string;
-  created_at: string;
-  lines?: ReceiptLine[];
+export type ReceiptLine = ReceiptItem;
+
+export interface ReceiptItemCreate {
+  product_id: string;
+  quantity: number;
 }
 
 export interface ReceiptCreate {
+  reference: string;
+  supplier_id: string;
+  items: ReceiptItemCreate[];
+}
+
+export interface ReceiptValidate {
+  location_id: string;
+}
+
+export interface ReceiptResponse {
+  id: string;
+  reference: string;
+  supplier_id: string;
+  status: ReceiptStatus;
+}
+
+export interface Receipt extends ReceiptResponse {
   supplier?: string;
-  warehouse_id: number;
+  warehouse_id?: string | number;
+  warehouse_name?: string;
   scheduled_date?: string;
-  lines?: Array<{
-    product_id: number;
-    expected_qty: number;
-    uom?: string;
-  }>;
+  created_at?: string;
+  items?: ReceiptItem[];
+  lines?: ReceiptItem[];
 }
 
 // ─── Delivery Orders ──────────────────────────────────────────────────────────
