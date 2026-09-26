@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Search,
   Plus,
@@ -13,138 +13,184 @@ import {
   List,
   SlidersHorizontal,
   Info,
+  Loader2,
+  WifiOff,
 } from "lucide-react";
-
-interface Product {
-  id: string;
-  sku: string;
-  name: string;
-  category: string;
-  stock: number;
-  uom: string;
-  reorder_point: number;
-  low_stock: boolean;
-}
-
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    sku: "CHAIR-001",
-    name: "Office Chair",
-    category: "Furniture",
-    stock: 150,
-    uom: "units",
-    reorder_point: 20,
-    low_stock: false,
-  },
-  {
-    id: "2",
-    sku: "STEEL-001",
-    name: "Steel Rod",
-    category: "Raw Materials",
-    stock: 47,
-    uom: "kg",
-    reorder_point: 50,
-    low_stock: true,
-  },
-  {
-    id: "3",
-    sku: "LAPTOP-001",
-    name: "Laptop",
-    category: "Electronics",
-    stock: 12,
-    uom: "units",
-    reorder_point: 15,
-    low_stock: true,
-  },
-  {
-    id: "4",
-    sku: "TABLE-001",
-    name: "Wooden Table",
-    category: "Furniture",
-    stock: 30,
-    uom: "units",
-    reorder_point: 10,
-    low_stock: false,
-  },
-  {
-    id: "5",
-    sku: "KB-001",
-    name: "Keyboard",
-    category: "Electronics",
-    stock: 0,
-    uom: "units",
-    reorder_point: 25,
-    low_stock: true,
-  },
-  {
-    id: "6",
-    sku: "MON-001",
-    name: "Monitor",
-    category: "Electronics",
-    stock: 68,
-    uom: "units",
-    reorder_point: 20,
-    low_stock: false,
-  },
-];
+import { productsApi } from "@/lib/api/products.api";
+import { categoriesApi } from "@/lib/api/categories.api";
+import { Product, Category } from "@/types/operations";
+import { ApiResponseError } from "@/lib/api/client";
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Form state for new product
   const [formName, setFormName] = useState("");
   const [formSku, setFormSku] = useState("");
-  const [formCategory, setFormCategory] = useState("Furniture");
-  const [formUom, setFormUom] = useState("units");
-  const [formStock, setFormStock] = useState("10");
-  const [formReorder, setFormReorder] = useState("15");
+  const [formCategory, setFormCategory] = useState("");
+  const [formUom, setFormUom] = useState("unit");
+  const [formReorder, setFormReorder] = useState("10");
 
-  const categories = ["All", "Furniture", "Raw Materials", "Electronics"];
+  const loadData = useCallback(async () => {
+    try {
+      const [prodsData, catsData] = await Promise.all([
+        productsApi.list(),
+        categoriesApi.list(),
+      ]);
+      setProducts(prodsData);
+      setCategories(catsData);
+      if (catsData.length > 0) {
+        setFormCategory((prev) => (prev ? prev : catsData[0].id));
+      }
+      setIsError(false);
+      setErrorMessage(null);
+    } catch (err: unknown) {
+      setIsError(true);
+      if (err instanceof ApiResponseError) {
+        setErrorMessage(err.detail);
+      } else {
+        setErrorMessage("Failed to load products or categories from the server.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function init() {
+      try {
+        const [prodsData, catsData] = await Promise.all([
+          productsApi.list(),
+          categoriesApi.list(),
+        ]);
+        if (isMounted) {
+          setProducts(prodsData);
+          setCategories(catsData);
+          if (catsData.length > 0) {
+            setFormCategory((prev) => (prev ? prev : catsData[0].id));
+          }
+          setIsError(false);
+          setErrorMessage(null);
+        }
+      } catch (err: unknown) {
+        if (isMounted) {
+          setIsError(true);
+          if (err instanceof ApiResponseError) {
+            setErrorMessage(err.detail);
+          } else {
+            setErrorMessage("Failed to load products or categories from the server.");
+          }
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+    init();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getCategoryName = (categoryId?: string) => {
+    if (!categoryId) return "Uncategorized";
+    const cat = categories.find((c) => c.id === categoryId);
+    return cat ? cat.name : "Uncategorized";
+  };
+
+  const categoryNames = ["All", ...categories.map((c) => c.name)];
 
   const filteredProducts = products.filter((p) => {
     const matchesSearch =
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.sku.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCat = selectedCategory === "All" || p.category === selectedCategory;
+    const catName = getCategoryName(p.category_id);
+    const matchesCat =
+      selectedCategory === "All" || catName === selectedCategory;
     return matchesSearch && matchesCat;
   });
 
   const totalProducts = products.length;
-  const lowStockCount = products.filter((p) => p.stock === 0 || p.low_stock).length;
+  const lowStockCount = products.filter((p) => {
+    const stock = p.stock_on_hand ?? 0;
+    const reorder = p.reorder_threshold ?? 0;
+    return stock === 0 || stock <= reorder;
+  }).length;
   const healthyCount = totalProducts - lowStockCount;
 
-  const handleAddProduct = (e: React.FormEvent) => {
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formName || !formSku) return;
+    if (!formName || !formSku || !formCategory) return;
 
-    const stockNum = parseInt(formStock) || 0;
-    const reorderNum = parseInt(formReorder) || 10;
-    const isLow = stockNum === 0 || stockNum <= reorderNum;
+    setIsSubmitting(true);
+    setSubmitError(null);
+    try {
+      await productsApi.create({
+        name: formName.trim(),
+        sku: formSku.trim().toUpperCase(),
+        category_id: formCategory,
+        unit_of_measure: formUom,
+        reorder_threshold: parseInt(formReorder) || 0,
+        is_active: true,
+      });
 
-    const newProduct: Product = {
-      id: Date.now().toString(),
-      sku: formSku.toUpperCase(),
-      name: formName,
-      category: formCategory,
-      stock: stockNum,
-      uom: formUom,
-      reorder_point: reorderNum,
-      low_stock: isLow,
-    };
-
-    setProducts([newProduct, ...products]);
-    setIsDrawerOpen(false);
-    // Reset form
-    setFormName("");
-    setFormSku("");
-    setFormStock("10");
-    setFormReorder("15");
+      setIsDrawerOpen(false);
+      // Reset form
+      setFormName("");
+      setFormSku("");
+      setFormReorder("10");
+      if (categories.length > 0) {
+        setFormCategory(categories[0].id);
+      }
+      // Refresh products list
+      await loadData();
+    } catch (err: unknown) {
+      if (err instanceof ApiResponseError) {
+        setSubmitError(err.detail);
+      } else {
+        setSubmitError("Failed to create product.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <p className="text-sm font-medium text-muted">Loading products inventory...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="bg-white rounded-2xl border border-border p-16 text-center shadow-sm max-w-lg mx-auto mt-12">
+        <div className="w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-4 text-rose-600">
+          <WifiOff className="w-8 h-8" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 mb-1">Could not connect to backend</h3>
+        <p className="text-sm text-muted mb-6">{errorMessage || "Ensure backend server is running."}</p>
+        <button onClick={loadData} className="btn-primary inline-flex items-center gap-2 cursor-pointer">
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 pb-12">
@@ -167,7 +213,10 @@ export default function ProductsPage() {
           </p>
         </div>
         <button
-          onClick={() => setIsDrawerOpen(true)}
+          onClick={() => {
+            setSubmitError(null);
+            setIsDrawerOpen(true);
+          }}
           className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium px-5 py-2.5 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-2 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
@@ -175,7 +224,7 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      {/* Stats Row (3 mini cards) */}
+      {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-border p-5 hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 shadow-sm">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md">
@@ -223,7 +272,7 @@ export default function ProductsPage() {
 
         <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
           <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-            {categories.map((cat) => (
+            {categoryNames.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -299,12 +348,16 @@ export default function ProductsPage() {
               </thead>
               <tbody className="divide-y divide-border text-sm">
                 {filteredProducts.map((product) => {
-                  const isOut = product.stock === 0;
-                  const isLow = product.low_stock && !isOut;
+                  const stock = product.stock_on_hand ?? 0;
+                  const reorder = product.reorder_threshold ?? 0;
+                  const isOut = stock === 0;
+                  const isLow = stock <= reorder && !isOut;
                   const progressPct = Math.min(
-                    (product.stock / (product.reorder_point * 3)) * 100,
+                    (stock / (Math.max(reorder, 1) * 3)) * 100,
                     100
                   );
+                  const catName = getCategoryName(product.category_id);
+                  const uom = product.unit_of_measure || "unit";
 
                   return (
                     <tr
@@ -321,14 +374,14 @@ export default function ProductsPage() {
                       </td>
                       <td className="py-4 px-6">
                         <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/5 text-primary border border-primary/20">
-                          {product.category}
+                          {catName}
                         </span>
                       </td>
                       <td className="py-4 px-6 text-right">
                         <div className="text-lg font-bold text-gray-900">
-                          {product.stock}{" "}
+                          {stock}{" "}
                           <span className="text-xs text-muted font-normal">
-                            {product.uom}
+                            {uom}
                           </span>
                         </div>
                         <div className="w-24 ml-auto mt-1.5 h-1.5 rounded-full bg-border overflow-hidden">
@@ -345,7 +398,7 @@ export default function ProductsPage() {
                         </div>
                       </td>
                       <td className="py-4 px-6 text-right text-muted font-medium">
-                        {product.reorder_point} {product.uom}
+                        {reorder} {uom}
                       </td>
                       <td className="py-4 px-6">
                         {isOut ? (
@@ -380,12 +433,16 @@ export default function ProductsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProducts.map((product) => {
-            const isOut = product.stock === 0;
-            const isLow = product.low_stock && !isOut;
+            const stock = product.stock_on_hand ?? 0;
+            const reorder = product.reorder_threshold ?? 0;
+            const isOut = stock === 0;
+            const isLow = stock <= reorder && !isOut;
             const progressPct = Math.min(
-              (product.stock / (product.reorder_point * 3)) * 100,
+              (stock / (Math.max(reorder, 1) * 3)) * 100,
               100
             );
+            const catName = getCategoryName(product.category_id);
+            const uom = product.unit_of_measure || "unit";
 
             return (
               <div
@@ -395,7 +452,7 @@ export default function ProductsPage() {
                 <div>
                   <div className="flex items-start justify-between mb-3">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/5 text-primary border border-primary/20">
-                      {product.category}
+                      {catName}
                     </span>
                     <button className="p-1.5 rounded-lg hover:bg-border transition-colors text-muted hover:text-gray-900 cursor-pointer">
                       <MoreVertical className="w-4 h-4" />
@@ -412,7 +469,7 @@ export default function ProductsPage() {
                         Current Stock
                       </span>
                       <span className="text-xl font-extrabold text-gray-900">
-                        {product.stock} <span className="text-xs text-muted font-normal">{product.uom}</span>
+                        {stock} <span className="text-xs text-muted font-normal">{uom}</span>
                       </span>
                     </div>
                     <div className="w-full h-1.5 rounded-full bg-border overflow-hidden">
@@ -432,7 +489,7 @@ export default function ProductsPage() {
 
                 <div className="flex items-center justify-between pt-3 border-t border-border">
                   <span className="text-xs text-muted">
-                    Reorder at: <strong className="text-gray-800">{product.reorder_point} {product.uom}</strong>
+                    Reorder at: <strong className="text-gray-800">{reorder} {uom}</strong>
                   </span>
                   {isOut ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-rose-100 text-rose-700 border border-rose-200">
@@ -486,6 +543,12 @@ export default function ProductsPage() {
 
             {/* Body */}
             <form onSubmit={handleAddProduct} className="flex-1 overflow-y-auto p-6 space-y-6">
+              {submitError && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700">
+                  {submitError}
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs uppercase text-muted font-semibold mb-2 tracking-wider">
                   Basic Info
@@ -528,16 +591,19 @@ export default function ProductsPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs text-gray-600 font-medium mb-1">
-                      Category
+                      Category *
                     </label>
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
+                      required
                       className="w-full px-3 py-3 bg-background rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     >
-                      <option value="Furniture">Furniture</option>
-                      <option value="Raw Materials">Raw Materials</option>
-                      <option value="Electronics">Electronics</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -550,6 +616,7 @@ export default function ProductsPage() {
                       onChange={(e) => setFormUom(e.target.value)}
                       className="w-full px-3 py-3 bg-background rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     >
+                      <option value="unit">unit</option>
                       <option value="units">units</option>
                       <option value="kg">kg</option>
                       <option value="pcs">pcs</option>
@@ -563,32 +630,17 @@ export default function ProductsPage() {
                 <label className="block text-xs uppercase text-muted font-semibold mb-2 tracking-wider">
                   Stock Settings
                 </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
-                      Initial Stock
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={formStock}
-                      onChange={(e) => setFormStock(e.target.value)}
-                      className="w-full px-4 py-3 bg-background rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs text-gray-600 font-medium mb-1">
-                      Reorder Level
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={formReorder}
-                      onChange={(e) => setFormReorder(e.target.value)}
-                      className="w-full px-4 py-3 bg-background rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs text-gray-600 font-medium mb-1">
+                    Reorder Threshold
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formReorder}
+                    onChange={(e) => setFormReorder(e.target.value)}
+                    className="w-full px-4 py-3 bg-background rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  />
                 </div>
               </div>
 
@@ -599,7 +651,7 @@ export default function ProductsPage() {
                 </p>
               </div>
 
-              {/* Footer inside form so submit works */}
+              {/* Footer */}
               <div className="pt-6 border-t border-border flex gap-3">
                 <button
                   type="button"
@@ -610,9 +662,14 @@ export default function ProductsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium flex-1 justify-center py-3 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium flex-1 justify-center py-3 rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                  Save Product
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "Save Product"
+                  )}
                 </button>
               </div>
             </form>

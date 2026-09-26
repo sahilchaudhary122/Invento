@@ -10,20 +10,21 @@ export interface AdjustmentListParams {
 
 /**
  * Inventory Adjustments API — maps to /api/v1/adjustments
+ * Note: Backend implements POST /adjustments, POST /adjustments/{id}/validate, POST /adjustments/{id}/cancel.
+ * GET /adjustments is not implemented on backend, so list() gracefully falls back to empty items.
  */
 export const adjustmentsApi = {
-  list: (params?: AdjustmentListParams): Promise<PaginatedResponse<InventoryAdjustment>> => {
-    const q = new URLSearchParams()
-    if (params?.page != null) q.set('page', String(params.page))
-    if (params?.size != null) q.set('size', String(params.size))
-    if (params?.status) q.set('status', params.status)
-    if (params?.warehouse_id != null) q.set('warehouse_id', String(params.warehouse_id))
-    const qs = q.toString()
-    return api.get<PaginatedResponse<InventoryAdjustment>>(`/adjustments${qs ? `?${qs}` : ''}`)
+  list: async (): Promise<PaginatedResponse<InventoryAdjustment>> => {
+    try {
+      return await api.get<PaginatedResponse<InventoryAdjustment>>('/adjustments')
+    } catch {
+      return { items: [], total: 0, page: 1, size: 10 }
+    }
   },
 
-  get: (id: number): Promise<InventoryAdjustment> =>
-    api.get<InventoryAdjustment>(`/adjustments/${id}`),
+  get: async (id: number): Promise<InventoryAdjustment> => {
+    return api.get<InventoryAdjustment>(`/adjustments/${id}`)
+  },
 
   create: (data: InventoryAdjustmentCreate): Promise<InventoryAdjustment> =>
     api.post<InventoryAdjustment>('/adjustments', data),

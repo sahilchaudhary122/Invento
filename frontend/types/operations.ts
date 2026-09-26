@@ -141,59 +141,61 @@ export interface InternalTransferCreate {
 
 export type AdjustmentStatus = 'draft' | 'validated' | 'cancelled';
 
-export interface AdjustmentLine {
-  id: number;
-  adjustment_id: number;
-  product_id: number;
-  product_name?: string;
-  location_id: number;
-  location_name?: string;
-  theoretical_qty: number;
-  real_qty: number;
-  difference: number;
-}
-
-export interface InventoryAdjustment {
-  id: number;
-  reference: string;
-  warehouse_id: number;
-  warehouse_name?: string;
-  status: AdjustmentStatus;
-  reason?: string;
-  created_at: string;
-  lines?: AdjustmentLine[];
+export interface AdjustmentItemCreate {
+  product_id: string;
+  physical_quantity: number;
 }
 
 export interface InventoryAdjustmentCreate {
-  warehouse_id: number;
+  reference: string;
+  location_id: string;
+  reason: string;
+  items: AdjustmentItemCreate[];
+}
+
+export interface AdjustmentLine {
+  id: string | number;
+  adjustment_id: string | number;
+  product_id: string | number;
+  product_name?: string;
+  system_quantity?: number;
+  physical_quantity?: number;
+  difference?: number;
+}
+
+export interface InventoryAdjustment {
+  id: string | number;
+  reference: string;
+  location_id: string;
+  location_name?: string;
+  status: AdjustmentStatus;
   reason?: string;
-  lines?: Array<{
-    product_id: number;
-    location_id: number;
-    real_qty: number;
-  }>;
+  created_at: string;
+  items?: AdjustmentLine[];
+  lines?: AdjustmentLine[];
 }
 
 // ─── Products / Inventory ─────────────────────────────────────────────────────
 
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  created_at: string;
+}
+
 export interface Product {
-  id: number;
+  id: string;
   sku: string;
   name: string;
   description?: string;
-  category_id?: number;
+  category_id: string;
   category_name?: string;
-  uom: string;
-  reorder_point: number;
+  unit_of_measure: string;
+  reorder_threshold: number;
+  is_active: boolean;
   created_at: string;
   stock_on_hand?: number;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  parent_id?: number;
-  created_at: string;
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
