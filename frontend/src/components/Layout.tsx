@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
-import { ChevronRight } from 'lucide-react'
+import Navbar from './Navbar'
 
 const routeLabels: Record<string, string> = {
   '/receipts':        'Receipts',
@@ -23,16 +23,8 @@ export default function Layout() {
       <Sidebar />
 
       <div className="main-area">
-        {/* Top bar */}
-        <header className="topbar">
-          <div className="topbar-breadcrumb">
-            <span>Invento</span>
-            <ChevronRight size={13} style={{ color: 'var(--text-muted)' }} />
-            <span>Operations</span>
-            <ChevronRight size={13} style={{ color: 'var(--text-muted)' }} />
-            <span className="active">{activeLabel}</span>
-          </div>
-        </header>
+        {/* Top bar with breadcrumbs & user session */}
+        <Navbar activeLabel={activeLabel} />
 
         {/* Page content */}
         <main className="content-area">

@@ -2,7 +2,10 @@
  * Invento API Client
  * Base fetch wrapper for all backend calls.
  * Exposes typed errors so UI can show honest "backend not connected" states.
+ * Automatically injects JWT Bearer token and clears on 401.
  */
+
+import { getToken, removeToken } from '../utils/token';
 
 const BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
@@ -34,19 +37,37 @@ export class ApiResponseError extends Error {
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   let response: Response;
 
+  const reqHeaders: Record<string, string> = {
+    ...((options?.headers as Record<string, string>) || {}),
+  };
+
+  // Default to application/json if Content-Type is not explicitly provided
+  // and body is not URLSearchParams
+  if (!reqHeaders['Content-Type'] && !(options?.body instanceof URLSearchParams)) {
+    reqHeaders['Content-Type'] = 'application/json';
+  }
+
+  // Automatically attach Bearer token if available
+  const token = getToken();
+  if (token && !reqHeaders['Authorization']) {
+    reqHeaders['Authorization'] = `Bearer ${token}`;
+  }
+
   try {
     response = await fetch(`${BASE_URL}${path}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
       ...options,
+      headers: reqHeaders,
     });
   } catch {
     throw new ApiNotAvailableError();
   }
 
   if (!response.ok) {
+    // Clear stored token if unauthenticated or session expired
+    if (response.status === 401) {
+      removeToken();
+    }
+
     let detail = `HTTP ${response.status} ${response.statusText}`;
     try {
       const body = await response.json();
@@ -75,6 +96,20 @@ export const api = {
     request<T>(path, {
       method: 'POST',
       body: JSON.stringify(body),
+      ...options,
+    }),
+
+  /**
+   * Specifically for OAuth2 and form URL-encoded endpoints (e.g., login)
+   */
+  postForm: <T>(path: string, params: URLSearchParams, options?: RequestInit) =>
+    request<T>(path, {
+      method: 'POST',
+      body: params.toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ...options?.headers,
+      },
       ...options,
     }),
 
