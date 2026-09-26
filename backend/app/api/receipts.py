@@ -3,9 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.session import get_db
-from app.models.inventory import Receipt, ReceiptItem
+from app.models.inventory import Receipt, ReceiptItem, StockLedger
 from app.models.product import Product
 from app.models.location import Location
+from app.models.stock import Stock
 from app.schemas.receipt import ReceiptCreate, ReceiptResponse
 from app.schemas.receipt_action import ReceiptValidate
 from app.api.deps import get_current_user
@@ -34,14 +35,31 @@ def validate_receipt(id: uuid.UUID, action_in: ReceiptValidate, db: Session = De
     receipt = db.query(Receipt).filter(Receipt.id == id).first()
     if not receipt or receipt.status != "DRAFT":
         raise HTTPException(status_code=409, detail="Receipt not found or already validated/canceled")
-    
+
     location = db.query(Location).filter(Location.id == action_in.location_id).first()
     if not location:
         raise HTTPException(status_code=404, detail="Location not found")
-        
+
     try:
         for item in receipt.items:
+            old_stock = db.query(Stock).filter_by(product_id=item.product_id, location_id=action_in.location_id).first()
+            previous_stock = old_stock.quantity if old_stock else 0
+
             add_stock(db, item.product_id, action_in.location_id, item.quantity)
+
+            ledger = StockLedger(
+                product_id=item.product_id,
+                user_id=current_user.id,
+                operation_type="RECEIPT",
+                reference=receipt.reference,
+                destination_location_id=action_in.location_id,
+                quantity=item.quantity,
+                previous_stock=previous_stock,
+                new_stock=previous_stock + item.quantity,
+                status="VALIDATED"
+            )
+            db.add(ledger)
+
         receipt.status = "VALIDATED"
         db.commit()
     except Exception:
@@ -54,7 +72,7 @@ def cancel_receipt(id: uuid.UUID, db: Session = Depends(get_db), current_user=De
     receipt = db.query(Receipt).filter(Receipt.id == id).first()
     if not receipt or receipt.status != "DRAFT":
         raise HTTPException(status_code=409, detail="Receipt not found or already validated/canceled")
-    
+
     receipt.status = "CANCELED"
     db.commit()
     return receipt
