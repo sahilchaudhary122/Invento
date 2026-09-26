@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.db.session import get_db
+from app.api import auth, categories, products
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -21,6 +22,9 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
+app.include_router(categories.router, prefix=f"{settings.API_V1_STR}/categories", tags=["categories"])
+app.include_router(products.router, prefix=f"{settings.API_V1_STR}/products", tags=["products"])
 
 @app.get("/")
 def read_root():
