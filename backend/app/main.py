@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.db.session import get_db
-from app.api import auth, categories, products, receipts, deliveries, transfers, adjustments, ledger, dashboard
+from app.api import auth, categories, products, receipts, deliveries, transfers, adjustments, ledger, dashboard, warehouses, locations
 from app.api.errors import add_exception_handlers
 
 app = FastAPI(
@@ -34,6 +34,8 @@ app.include_router(transfers.router, prefix=f"{settings.API_V1_STR}/transfers", 
 app.include_router(adjustments.router, prefix=f"{settings.API_V1_STR}/adjustments", tags=["adjustments"])
 app.include_router(ledger.router, prefix=f"{settings.API_V1_STR}/ledger", tags=["ledger"])
 app.include_router(dashboard.router, prefix=f"{settings.API_V1_STR}/dashboard", tags=["dashboard"])
+app.include_router(warehouses.router, prefix=f"{settings.API_V1_STR}/warehouses", tags=["warehouses"])
+app.include_router(locations.router, prefix=f"{settings.API_V1_STR}/locations", tags=["locations"])
 
 @app.get("/")
 def read_root():
