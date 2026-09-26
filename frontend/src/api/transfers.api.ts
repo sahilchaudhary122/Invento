@@ -1,4 +1,9 @@
-import type { InternalTransfer, InternalTransferCreate, PaginatedResponse } from '../types/operations'
+import type {
+  InternalTransfer,
+  InternalTransferCreate,
+  TransferResponse,
+  PaginatedResponse,
+} from '../types/operations'
 import { api } from './client'
 
 export interface TransferListParams {
@@ -20,16 +25,14 @@ export const transfersApi = {
     return api.get<PaginatedResponse<InternalTransfer>>(`/transfers${qs ? `?${qs}` : ''}`)
   },
 
-  get: (id: number): Promise<InternalTransfer> =>
-    api.get<InternalTransfer>(`/transfers/${id}`),
+  create: (data: InternalTransferCreate): Promise<TransferResponse> =>
+    api.post<TransferResponse>('/transfers', data),
 
-  create: (data: InternalTransferCreate): Promise<InternalTransfer> =>
-    api.post<InternalTransfer>('/transfers', data),
+  /** Validate the transfer — deduct from source, add to destination, log to StockLedger */
+  validate: (id: string): Promise<TransferResponse> =>
+    api.post<TransferResponse>(`/transfers/${id}/validate`, {}),
 
-  /** Validate the transfer — deduct from source, add to destination */
-  validate: (id: number): Promise<InternalTransfer> =>
-    api.post<InternalTransfer>(`/transfers/${id}/validate`, {}),
-
-  cancel: (id: number): Promise<InternalTransfer> =>
-    api.post<InternalTransfer>(`/transfers/${id}/cancel`, {}),
+  cancel: (id: string): Promise<TransferResponse> =>
+    api.post<TransferResponse>(`/transfers/${id}/cancel`, {}),
 }
+

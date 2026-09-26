@@ -120,40 +120,51 @@ export interface DeliveryOrder extends DeliveryResponse {
 
 // ─── Internal Transfers ───────────────────────────────────────────────────────
 
-export type TransferStatus = 'draft' | 'confirmed' | 'done' | 'cancelled';
+export type TransferStatus = 'DRAFT' | 'VALIDATED' | 'CANCELED';
 
-export interface TransferLine {
-  id: number;
-  transfer_id: number;
-  product_id: number;
+export interface TransferItem {
+  id?: string;
+  transfer_id?: string;
+  product_id: string;
   product_name?: string;
-  qty: number;
-  uom?: string;
+  quantity: number;
 }
 
-export interface InternalTransfer {
-  id: number;
-  reference: string;
-  from_location_id: number;
-  to_location_id: number;
-  from_location_name?: string;
-  to_location_name?: string;
-  status: TransferStatus;
-  scheduled_date?: string;
-  created_at: string;
-  lines?: TransferLine[];
+export type TransferLine = TransferItem;
+
+export interface TransferItemCreate {
+  product_id: string;
+  quantity: number;
 }
 
 export interface InternalTransferCreate {
-  from_location_id: number;
-  to_location_id: number;
-  scheduled_date?: string;
-  lines?: Array<{
-    product_id: number;
-    qty: number;
-    uom?: string;
-  }>;
+  reference: string;
+  source_location_id: string;
+  destination_location_id: string;
+  items: TransferItemCreate[];
 }
+
+export interface TransferResponse {
+  id: string;
+  reference: string;
+  source_location_id: string;
+  destination_location_id: string;
+  status: TransferStatus;
+}
+
+export interface InternalTransfer extends TransferResponse {
+  from_location_id?: string | number;
+  to_location_id?: string | number;
+  from_location_name?: string;
+  to_location_name?: string;
+  source_location_name?: string;
+  destination_location_name?: string;
+  scheduled_date?: string;
+  created_at?: string;
+  items?: TransferItem[];
+  lines?: TransferItem[];
+}
+
 
 // ─── Inventory Adjustments ────────────────────────────────────────────────────
 
